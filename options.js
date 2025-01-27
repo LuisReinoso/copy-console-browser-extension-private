@@ -1,43 +1,33 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const patternInput = document.getElementById("pattern");
-  const saveButton = document.getElementById("save");
+document.addEventListener("DOMContentLoaded", () => {
+  const copyButton = document.getElementById("copyButton");
   const status = document.getElementById("status");
 
-  // Load saved pattern
-  const result = await chrome.storage.sync.get({ pattern: "[DEBUG]" });
-  patternInput.value = result.pattern;
-
-  saveButton.addEventListener("click", async () => {
-    const pattern = patternInput.value.trim();
-
-    if (!pattern) {
-      status.textContent = "Pattern cannot be empty";
-      status.className = "status error";
-      return;
-    }
-
+  copyButton.addEventListener("click", async () => {
     try {
-      // Save pattern
-      await chrome.storage.sync.set({ pattern });
+      const [tab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
+      });
 
-      // Update pattern in all active tabs
-      const tabs = await chrome.tabs.query({});
-      for (const tab of tabs) {
-        try {
-          await chrome.tabs.sendMessage(tab.id, {
-            action: "updatePattern",
-            pattern,
-          });
-        } catch (error) {
-          // Ignore errors for tabs that don't have our content script
-        }
+      if (!tab?.id) {
+        status.textContent = "Error: No active tab found";
+        status.className = "status error";
+        return;
       }
 
-      status.textContent = "Settings saved successfully!";
-      status.className = "status success";
+      const response = await chrome.tabs.sendMessage(tab.id, {
+        action: "copyLogs",
+      });
+
+      if (!response) {
+        throw new Error("Content script not responding");
+      }
+
+      // ... rest of original code ...
     } catch (error) {
-      status.textContent = "Error saving settings: " + error.message;
+      status.textContent = `Error: ${error.message}`;
       status.className = "status error";
+      console.error("Extension error:", error);
     }
   });
 });

@@ -8,6 +8,8 @@ A browser extension that allows developers to easily copy console log messages c
 - Configurable pattern matching (default: `[DEBUG]`)
 - Visual feedback and notifications when logs are copied
 - Works across all console methods (log, info, warn, error)
+- Efficient console message interception and processing
+- Modular architecture with utility functions for better maintainability
 
 ## Installation
 
@@ -38,14 +40,26 @@ The extension is built using standard web technologies:
 ├── manifest.json          # Extension configuration
 ├── background.js         # Background service worker
 ├── content.js           # Console interception logic
-├── popup.html          # Toolbar popup interface
-├── popup.js           # Popup functionality
-├── options.html      # Settings page
-├── options.js       # Settings functionality
-├── styles.css      # Shared styles
-└── icons/         # Extension icons
+├── inject.js           # Injected content script utilities
+├── utils.js           # Shared utility functions
+├── popup.html        # Toolbar popup interface
+├── popup.js         # Popup functionality
+├── options.html    # Settings page
+├── options.js     # Settings functionality
+├── styles.css    # Shared styles
+└── icons/       # Extension icons
 ```
+
+### Dependencies
+
+The project uses minimal dependencies and is managed with pnpm for better package management.
 
 ## Contributing
 
-Feel free to submit issues and enhancement requests! 
+Feel free to submit issues and enhancement requests! Follow these steps to contribute:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request 

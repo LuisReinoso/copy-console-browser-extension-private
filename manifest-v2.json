@@ -12,7 +12,8 @@
   ],
   "host_permissions": ["<all_urls>"],
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background.js"],
+    "type": "module"
   },
   "action": {
     "default_popup": "popup.html",
@@ -43,5 +44,11 @@
       "resources": ["inject.js"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "copy-console@luisreinoso.dev",
+      "strict_min_version": "109.0"
+    }
+  }
 }

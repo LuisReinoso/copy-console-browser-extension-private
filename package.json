@@ -1,0 +1,13 @@
+{
+  "name": "copy-console-browser-extension",
+  "version": "1.0.0",
+  "description": "Browser extension to copy console logs matching specified patterns",
+  "scripts": {
+    "build:chrome": "./build.sh chrome",
+    "build:firefox": "./build.sh firefox"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0"
+  }
+}

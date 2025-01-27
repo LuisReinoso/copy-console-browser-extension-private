@@ -7,9 +7,25 @@
   <body>
     <div class="container">
       <h1>Copy Console</h1>
+      <div class="pattern-config">
+        <label for="debugPattern">Debug Pattern:</label>
+        <input type="text" id="debugPattern" placeholder="[DEBUG]" />
+        <div class="pattern-info">
+          Current pattern: <span id="currentPattern">[DEBUG]</span>
+        </div>
+      </div>
+      <div class="debug-mode">
+        <label class="toggle">
+          <input type="checkbox" id="debugMode" />
+          <span class="toggle-label">Debug Mode</span>
+          <span class="toggle-slider"></span>
+        </label>
+        <div class="help-text">Show extension debug logs in console</div>
+      </div>
       <button id="copyButton">Copy Matching Logs</button>
       <div id="status" class="status"></div>
     </div>
+    <script src="utils.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>
