@@ -10,7 +10,7 @@
     "notifications",
     "clipboardWrite"
   ],
-  "host_permissions": ["<all_urls>"],
+  "host_permissions": ["https://api.lemonsqueezy.com/v1/licenses/*"],
   "background": {
     "service_worker": "background.js"
   },

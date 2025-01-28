@@ -1,10 +1,82 @@
 // popup.js
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const copyButton = document.getElementById("copyButton");
   const status = document.getElementById("status");
   const debugPatternInput = document.getElementById("debugPattern");
   const currentPatternSpan = document.getElementById("currentPattern");
   const debugModeToggle = document.getElementById("debugMode");
+  const licenseStatus = document.getElementById("licenseStatus");
+  const freeUsageStatus = document.getElementById("freeUsageStatus");
+  const remainingCopies = document.getElementById("remainingCopies");
+
+  // Add event listener for activate premium button
+  document
+    .getElementById("activateLicense")
+    .addEventListener("click", async () => {
+      const licenseKey = document.getElementById("licenseKey").value;
+      if (!licenseKey) {
+        status.textContent = "Please enter a license key";
+        status.className = "status error";
+        return;
+      }
+
+      status.textContent = "Validating license...";
+      status.className = "status info";
+
+      try {
+        const response = await chrome.runtime.sendMessage({
+          action: "validateLicense",
+          key: licenseKey,
+        });
+
+        if (response.valid) {
+          status.textContent = "License activated successfully!";
+          status.className = "status success";
+          window.location.reload(); // Reload popup to update UI
+        } else {
+          status.textContent = response.error || "Invalid license key";
+          status.className = "status error";
+        }
+      } catch (error) {
+        status.textContent = `Error: ${error.message}`;
+        status.className = "status error";
+      }
+    });
+
+  // Check license status
+  const { licenseValid, licenseData } = await chrome.storage.local.get([
+    "licenseValid",
+    "licenseData",
+  ]);
+
+  if (licenseValid && licenseData) {
+    // Show premium badge
+    document.getElementById("licenseBadge").textContent = "Premium";
+    document.getElementById("licenseBadge").classList.add("active");
+    // Hide license input and free usage status when premium
+    document.querySelector(".license-input").style.display = "none";
+    document.querySelector(".buy-link").style.display = "none";
+    freeUsageStatus.style.display = "none";
+  } else {
+    document.getElementById("licenseBadge").textContent = "Free";
+    document.getElementById("licenseBadge").classList.remove("active");
+    // Show license input and free usage status
+    document.querySelector(".license-input").style.display = "block";
+    document.querySelector(".buy-link").style.display = "block";
+    freeUsageStatus.style.display = "block";
+
+    // Update remaining copies display
+    updateRemainingCopies();
+  }
+
+  // Function to update remaining copies display
+  async function updateRemainingCopies() {
+    const { copyClickCount = 0 } = await chrome.storage.local.get(
+      "copyClickCount"
+    );
+    const remaining = Math.max(0, MAX_COPY_CLICKS - copyClickCount);
+    remainingCopies.textContent = remaining;
+  }
 
   // Load current settings
   chrome.storage.sync.get(
@@ -87,7 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  copyButton.addEventListener("click", async () => {
+  let copyClickCount = 0;
+  const MAX_COPY_CLICKS = 5;
+
+  async function handleCopyButtonClick() {
     console.log("[EXTENSION] Copy button clicked");
     status.textContent = "Copying...";
     status.className = "status info";
@@ -101,27 +176,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!tab?.id) throw new Error("No active tab found");
 
-      const response = await new Promise((resolve) => {
-        chrome.tabs.sendMessage(tab.id, { action: "copyLogs" }, resolve);
-      });
-      console.log("[EXTENSION] Content script response:", response);
+      // Check if user has premium status
+      chrome.storage.local.get(
+        ["licenseValid", "copyClickCount"],
+        function (result) {
+          if (!result.licenseValid) {
+            // Free user - check click limit
+            const currentClicks = (result.copyClickCount || 0) + 1;
 
-      if (!response) {
-        handleMissingContentScript(status);
-        return;
-      }
+            if (currentClicks > MAX_COPY_CLICKS) {
+              status.textContent =
+                "Free plan limited to 5 copies per day. Please upgrade to Premium for unlimited access!";
+              status.className = "status error";
+              return;
+            }
 
-      // Update the current pattern display if it's included in the response
-      if (response.currentPattern) {
-        currentPatternSpan.textContent = response.currentPattern;
-      }
+            // Update click count and remaining copies display
+            chrome.storage.local.set({ copyClickCount: currentClicks }, () => {
+              updateRemainingCopies();
+            });
+          }
 
-      updateUI(status, response);
-      showNotification(response);
+          // Proceed with copy operation
+          chrome.tabs.sendMessage(
+            tab.id,
+            { action: "copyLogs" },
+            (response) => {
+              if (!response) {
+                handleMissingContentScript(status);
+                return;
+              }
+
+              if (response.currentPattern) {
+                currentPatternSpan.textContent = response.currentPattern;
+              }
+
+              updateUI(status, response);
+              showNotification(response);
+            }
+          );
+        }
+      );
     } catch (error) {
       handleError(status, error);
     }
-  });
+  }
+
+  // Attach the click handler to the copy button
+  copyButton.addEventListener("click", handleCopyButtonClick);
 
   function handleMissingContentScript(statusElement) {
     statusElement.textContent = "Error: Please refresh the page and try again";
@@ -190,4 +292,34 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("status").textContent = `Error: ${error.message}`;
     }
   });
+
+  function resetCopyClickCount() {
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+
+    chrome.storage.local.set(
+      {
+        copyClickCount: 0,
+        lastResetDate: new Date().toDateString(),
+      },
+      () => {
+        updateRemainingCopies(); // Update display after reset
+      }
+    );
+  }
+
+  function checkAndResetCounter() {
+    chrome.storage.local.get(["lastResetDate"], function (data) {
+      const today = new Date().toDateString();
+      if (!data.lastResetDate || data.lastResetDate !== today) {
+        resetCopyClickCount();
+      } else {
+        updateRemainingCopies(); // Update display on popup open
+      }
+    });
+  }
+
+  // Initialize
+  checkAndResetCounter();
+  copyButton.addEventListener("click", handleCopyButtonClick);
 });

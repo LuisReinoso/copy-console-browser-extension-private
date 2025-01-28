@@ -1,2 +1,10 @@
 node_modules
 dist
+
+# Environment variables
+.env
+.env*
+!.env.example
+
+# Build directories
+/dist/

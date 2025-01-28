@@ -195,3 +195,54 @@ button:active {
 .toggle input:focus + .toggle-label + .toggle-slider {
   box-shadow: 0 0 1px #2196f3;
 }
+
+.license-input {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+  flex-direction: column;
+}
+
+#licenseKey {
+  flex: 1;
+  margin-top: 8px;
+}
+
+#activateLicense {
+  width: 100%;
+}
+
+.buy-link {
+  margin: 8px 0 0;
+  text-align: center;
+}
+
+.buy-link a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.buy-link a:hover {
+  text-decoration: underline;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  font-weight: 500;
+  display: none;
+}
+
+.badge.active {
+  display: inline-block;
+}

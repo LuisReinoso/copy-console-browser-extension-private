@@ -6,7 +6,24 @@
   </head>
   <body>
     <div class="container">
-      <h1>Copy Console</h1>
+      <div class="title-container">
+        <h1>Copy Console</h1>
+        <span id="licenseBadge" class="badge">Premium</span>
+      </div>
+      <div id="freeUsageStatus" class="status">
+        Remaining copies today: <span id="remainingCopies">5</span>
+      </div>
+      <div class="license-input">
+        <button id="activateLicense">Activate Premium</button>
+        <input type="text" id="licenseKey" placeholder="Enter license key" />
+      </div>
+      <p class="buy-link">
+        <a
+          href="https://luisreinosodev.lemonsqueezy.com/buy/34bfb707-eca5-47d4-b775-f6e840043002"
+          target="_blank"
+          >Upgrade to Premium for unlimited copies</a
+        >
+      </p>
       <div class="pattern-config">
         <label for="debugPattern">Debug Pattern:</label>
         <input type="text" id="debugPattern" placeholder="[DEBUG]" />
