@@ -1,65 +1,43 @@
-# Copy Console Browser Extension
+# Copy Console Browser Extension 🚀
 
-A browser extension that allows developers to easily copy console log messages containing specified patterns (default: `[DEBUG]`). This tool is particularly useful when working with language models (LLMs) and debugging applications.
+> Supercharge your debugging workflow by instantly capturing and copying console logs with pattern matching!
 
-## Features
+<div align="center">
+  <img src="main.png" alt="Copy Console Extension Demo" height="600px"/>
+  
+  <p>
+    <img src="https://img.shields.io/badge/Chrome-Available-brightgreen?logo=google-chrome&logoColor=white" alt="Chrome" />
+    <img src="https://img.shields.io/badge/Firefox-Available-brightgreen?logo=firefox-browser&logoColor=white" alt="Firefox" />
+  </p>
+</div>
 
-- One-click copying of console logs containing a configured pattern
-- Configurable pattern matching (default: `[DEBUG]`)
-- Visual feedback and notifications when logs are copied
-- Works across all console methods (log, info, warn, error)
-- Efficient console message interception and processing
-- Modular architecture with utility functions for better maintainability
+## ✨ Features
 
-## Installation
+- 🎯 **Smart Pattern Matching**: Easily copy console logs containing your specified patterns (default: `[DEBUG]`)
+- ⚡ **Lightning Fast**: Efficient console message interception with zero performance impact
+- 🎨 **Visual Feedback**: Clean notifications when logs are copied
+- 🛠️ **Highly Configurable**: Customize patterns to match your logging style
+- 🔄 **Universal Console Support**: Works with all console methods (log, info, warn, error)
+- 📦 **Lightweight**: Minimal dependencies, built for performance
+- 🌐 **Cross-Browser**: Fully supported on Chrome and Firefox
 
-1. Clone this repository or download the source code
-2. Open your browser's extension management page:
-   - Chrome: Navigate to `chrome://extensions/`
-   - Edge: Navigate to `edge://extensions/`
-3. Enable "Developer Mode" in the top-right corner
-4. Click "Load unpacked" and select the extension directory
+## 🚀 Quick Start
 
-## Usage
+1. Install the extension:
+   - [Chrome Web Store](https://chrome.google.com/webstore/category/extensions)
+   - [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/extensions/)
 
-1. Click the extension icon in your browser toolbar to copy matching logs
-2. Access the options page by right-clicking the extension icon and selecting "Options" to configure the pattern
-3. The extension will collect all console messages containing your specified pattern
-4. Click the toolbar button to copy all matching logs to your clipboard
+2. After installation, you'll see the extension icon in your browser toolbar
 
-## Development
+## 🎮 Usage
 
-The extension is built using standard web technologies:
-- HTML/CSS for the user interface
-- JavaScript for the core functionality
-- Chrome Extension Manifest V3
+1. Click the extension icon in your toolbar to copy matching logs
+2. Configure pattern matching in the options page (right-click icon → Options)
+3. Watch as your matching logs are collected automatically
+4. One-click copy to clipboard when you need them!
 
-### Project Structure
+---
 
-```
-├── manifest.json          # Extension configuration
-├── background.js         # Background service worker
-├── content.js           # Console interception logic
-├── inject.js           # Injected content script utilities
-├── utils.js           # Shared utility functions
-├── popup.html        # Toolbar popup interface
-├── popup.js         # Popup functionality
-├── options.html    # Settings page
-├── options.js     # Settings functionality
-├── styles.css    # Shared styles
-└── icons/       # Extension icons
-```
-
-### Dependencies
-
-The project uses minimal dependencies and is managed with pnpm for better package management.
-
-## Contributing
-
-Feel free to submit issues and enhancement requests! Follow these steps to contribute:
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request 
+<div align="center">
+  <strong>Made with ❤️ for developers who love build fast</strong>
+</div> 
